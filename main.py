@@ -1,44 +1,43 @@
-import pygame as pg
-from models import Plane, Bullet
+import sys
+from settings import *
+from invaders import Invaders
 
-def main():
-    """Entry point and start the game"""
-    pg.init()
-    FPS = 30
-    CLOCK = pg.time.Clock()
+class Game:
+    def __init__(self):
+        pg.init()
+        pg.display.set_caption("Space Invaders")
+        self.window = pg.display.set_mode(FIELD_SIZE)
+        self.CLOCK = pg.time.Clock()
+        self.plane_pos = [400, 700]
+        self.invaders = Invaders(self)
+    
+    def update(self):
+        self.invaders.update(self.plane_pos)
+        self.CLOCK.tick(FPS)
 
-    window = pg.display.set_mode((1000, 800))
-    pg.display.set_caption("Space Invaders")
-    plane = Plane("King", 300)
-    # bullet = Bullet([plane.position[0] + 20, plane.position[1] - 10])
-    bullets = [Bullet([plane.position[0] + 20, plane.position[1] - 10])]
-    running = True
-    while running:
-        window.fill((255, 255, 255))
-        pg.draw.rect(window, (255, 0, 255), pg.Rect(plane.position[0], plane.position[1], plane.size, plane.size))
-        for bullet in bullets:
-            pg.draw.rect(window, (255, 0, 0), pg.Rect(bullet.position[0], bullet.position[1], bullet.size, bullet.size))
+    def draw(self):
+        self.window.fill(color=(48, 39, 32))
+        self.invaders.draw()
+        pg.display.flip()
+
+    def check_events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                running = False
-        
+                pg.quit()
+                sys.exit()
+
         key_input = pg.key.get_pressed()
         if key_input[pg.K_LEFT]:
-            plane.position[0] -= 10
+            self.plane_pos[0] -= 10
         elif key_input[pg.K_RIGHT]:
-            plane.position[0] += 10
+            self.plane_pos[0] += 10
 
-        bullet.position[1] -= 5
-        if bullet.position[1] < 500:
-            if len(bullets) > 0:
-                bullets.pop()
-            bullets.append(Bullet([plane.position[0] + 20, plane.position[1] - 10]))
-
-        pg.display.update()
-        CLOCK.tick(FPS)
-
-    pg.quit()
-
+    def run(self):
+        while True:
+            self.check_events()
+            self.update()
+            self.draw()
 
 if __name__ == "__main__":
-    main()
+    game = Game()
+    game.run()

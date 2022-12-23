@@ -1,11 +1,22 @@
+from settings import *
+from .bullet import Bullet
 
+class Plane(pg.sprite.Sprite):
+    def __init__(self, invaders, pos):
+        super().__init__(invaders.sprite_group)
+        self.size = 50
+        self.image = pg.Surface([self.size, self.size])
+        self.image.fill('orange')
+        self.position = pos
+        self.bullet = Bullet(invaders, [self.position[0] + 20, self.position[1] - 10])
 
-class Plane:
-    def __init__(self, name, ranking):
-        self.name = name
-        self.ranking = ranking
-        self.size = 50;
-        self.position = [400, 700]
+        self.rect = self.image.get_rect()
+        self.rect.topleft = self.position[0], self.position[1]
 
-    def __str__(self) -> str:
-        return self.name
+    def update(self, pos):
+        self.position = pos
+        self.bullet.update()
+        self.rect.topleft = self.position[0], self.position[1]
+
+    def draw(self):
+        pg.draw.rect(self.game.window, (255, 0, 255), pg.Rect(self.position[0], self.position[1], self.size, self.size))
