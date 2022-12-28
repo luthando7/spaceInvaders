@@ -13,8 +13,8 @@ class Bullet(pg.sprite.Sprite):
 
     def update(self):
         self.position[1] -= 10
-        if self.position[1] < 400:
-            self.__new__(self.invaders, self.position)
+        if self.position[1] < 0:
+            self.kill()
         self.rect.topleft = self.position[0], self.position[1]
 
     def draw(self):
