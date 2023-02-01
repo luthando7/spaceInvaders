@@ -1,3 +1,5 @@
+#! /usr/bin/python3
+
 import sys
 from settings import *
 from invaders import Invaders

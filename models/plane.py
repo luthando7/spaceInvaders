@@ -14,10 +14,13 @@ class Plane(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = self.position[0], self.position[1]
 
-    def update(self, pos):
+    def update(self, pos, enemy):
         if self.bullet.position[1] < 0:
             self.bullet.kill()
             self.bullet = Bullet(self.invaders, [self.position[0] + 20, self.position[1] - 10])
+
+        if self.bullet.position == enemy.position:
+            pass
         self.position = pos
         self.bullet.update()
         self.rect.topleft = self.position[0], self.position[1]
